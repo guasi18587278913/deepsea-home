@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>深海圈 · 官网 Demo</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: light;
+      }
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: linear-gradient(180deg, #f8fbff 0%, #ffffff 45%, #eef2f8 100%);
+      }
+      details[open] summary::after {
+        transform: rotate(90deg);
+      }
+      summary::marker {
+        display: none;
+      }
+      summary::after {
+        content: "→";
+        display: inline-block;
+        margin-left: 0.5rem;
+        transition: transform 0.2s ease;
+      }
+      #faq summary::after {
+        content: none;
+      }
+      #faq .faq-arrow {
+        transition: transform 0.2s ease;
+      }
+      #faq details[open] .faq-arrow {
+        transform: rotate(180deg);
+      }
+      .glass {
+        backdrop-filter: blur(12px);
+        background: rgba(255, 255, 255, 0.9);
+      }
+      .glass-card {
+        border-radius: 32px;
+        background: rgba(255, 255, 255, 0.82);
+        box-shadow: 0 24px 48px rgba(15, 23, 42, 0.08);
+        backdrop-filter: blur(18px);
+        border: 1px solid rgba(226, 232, 240, 0.85);
+      }
+      .soft-card {
+        border-radius: 24px;
+        background: rgba(248, 250, 252, 0.65);
+        border: 1px solid rgba(226, 232, 240, 0.6);
+      }
+      .banner-bg {
+        background-size: cover;
+        background-position: center;
+        transition: background-image 0.6s ease, transform 0.6s ease;
+      }
+      .banner-dot {
+        height: 8px;
+        width: 8px;
+        border-radius: 9999px;
+        background-color: rgba(17, 24, 39, 0.2);
+        border: none;
+        cursor: pointer;
+        transition: width 0.3s ease, background-color 0.3s ease;
+      }
+      .banner-dot.active {
+        width: 20px;
+        background-color: rgba(17, 24, 39, 0.8);
+      }
+      #faq summary::after {
+        content: none;
+      }
+      #faq .faq-arrow {
+        transition: transform 0.2s ease;
+      }
+      #faq details[open] .faq-arrow {
+        transform: rotate(180deg);
+      }
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+        background: rgba(15, 23, 42, 0.45);
+        backdrop-filter: blur(8px);
+        z-index: 50;
+      }
+      .modal-overlay.active {
+        display: flex;
+      }
+      .modal-card {
+        position: relative;
+        max-width: 26rem;
+        width: 100%;
+        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 28px 60px rgba(15, 23, 42, 0.28);
+        border: 1px solid rgba(226, 232, 240, 0.9);
+        padding: 2rem;
+      }
+      .modal-card h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #111827;
+      }
+      .modal-card p {
+        margin-top: 0.75rem;
+        color: #4b5563;
+        line-height: 1.6;
+      }
+      .modal-actions {
+        margin-top: 1.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+      .modal-primary,
+      .modal-secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 9999px;
+        padding: 0.6rem 1.5rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+      }
+      .modal-primary {
+        background: linear-gradient(120deg, #f3c5a3, #d7d0ff);
+        color: #111827;
+        box-shadow: 0 16px 32px rgba(156, 120, 102, 0.25);
+      }
+      .modal-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 20px 40px rgba(123, 101, 90, 0.35);
+      }
+      .modal-secondary {
+        border: 1px solid rgba(226, 232, 240, 0.9);
+        background: rgba(255, 255, 255, 0.9);
+        color: #4b5563;
+        padding-inline: 1.2rem;
+      }
+      .modal-secondary:hover {
+        background: rgba(243, 244, 246, 0.9);
+      }
+      .modal-close {
+        position: absolute;
+        top: 1.25rem;
+        right: 1.25rem;
+        padding: 0.3rem 0.75rem;
+        font-size: 0.75rem;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-gradient-to-b from-white to-gray-50 text-gray-900">
+    <main>
+                  <section id="home" class="border-b pb-16 pt-24">
+        <div class="mx-auto flex max-w-6xl flex-col gap-10 px-4 lg:flex-row lg:items-center lg:justify-between">
+          <div class="glass-card max-w-3xl space-y-6 p-8 md:p-10">
+            <div class="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-indigo-700">
+              <span class="inline-flex h-2 w-2 rounded-full bg-indigo-500"></span>
+              生财有术 · 长周期深耕陪伴计划
+            </div>
+            <div>
+              <h1 class="text-3xl font-semibold leading-tight text-slate-900 md:text-4xl" data-testid="hero-title">
+                深海圈是什么？
+              </h1>
+              <p class="mt-4 text-base text-slate-700 md:text-lg">
+                通过课程 + 圈子的形式，带着一批圈友深度、长期、垂直、抱团在一个领域学习、实战、交流、分享。
+              </p>
+            </div>
+            <div class="flex flex-wrap gap-3 text-sm font-medium">
+              <a
+                href="#proof"
+                data-learning-modal
+                class="rounded-full bg-slate-900 px-6 py-2 text-white shadow-lg shadow-slate-300/60 transition hover:bg-slate-800 hover:shadow-xl"
+              >
+                进入我的学习页面
+              </a>
+              <a
+                href="#tracks"
+                class="rounded-full border border-slate-200 bg-white px-6 py-2 text-slate-700 shadow-sm transition hover:bg-slate-50"
+              >
+                选择一个合适方向
+              </a>
+            </div>
+          </div>
+          <div class="w-full space-y-4 lg:max-w-xl">
+            <div class="relative overflow-hidden rounded-3xl border border-slate-200/75 bg-slate-900/95 text-white shadow-2xl" id="hero-carousel">
+              <div class="relative h-64 md:h-72 lg:h-80">
+                <div class="banner-bg absolute inset-0" id="banner-background"></div>
+                <div class="relative z-10 flex h-full flex-col justify-between p-6 md:p-8 lg:p-10">
+                  <div class="space-y-4">
+                    <span id="banner-tag" class="inline-flex items-center rounded-full bg-white/12 px-3 py-1 text-xs font-medium uppercase tracking-widest"></span>
+                    <h3 id="banner-title" class="text-2xl font-semibold md:text-3xl lg:text-4xl"></h3>
+                    <p id="banner-desc" class="max-w-2xl text-sm text-white/80 md:text-base"></p>
+                  </div>
+                  <div class="flex flex-wrap items-center gap-3 text-sm">
+                    <a
+                      id="banner-cta"
+                      href="#tracks"
+                      class="rounded-full bg-white/95 px-4 py-2 font-medium text-slate-900 shadow hover:bg-white"
+                    ></a>
+                    <span id="banner-meta" class="text-xs text-white/70"></span>
+                  </div>
+                </div>
+              </div>
+              <button
+                id="banner-prev"
+                type="button"
+                aria-label="上一条"
+                class="absolute left-4 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/30 text-white backdrop-blur transition hover:bg-black/45"
+              >
+                ‹
+              </button>
+              <button
+                id="banner-next"
+                type="button"
+                aria-label="下一条"
+                class="absolute right-4 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/30 text-white backdrop-blur transition hover:bg-black/45"
+              >
+                ›
+              </button>
+              <div class="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-white/10"></div>
+            </div>
+            <div class="flex flex-wrap items-center justify-between gap-4 text-xs text-gray-500">
+              <div class="flex items-center gap-2" id="banner-dots"></div>
+              <div id="banner-progress"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+            
+      <section id="tracks" class="border-b py-14">
+  <div class="mx-auto max-w-6xl px-4">
+    <h2 class="text-2xl font-semibold">三个方向</h2>
+    <div class="mt-8 space-y-10">
+      <article class="soft-card border border-slate-200/70 p-6 shadow-sm md:p-8" id="ai-overseas">
+        <div class="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+          <div class="max-w-xl space-y-3">
+            <div class="flex flex-wrap items-center gap-2 text-xs text-gray-500">
+              <span class="inline-flex items-center rounded-full border px-2 py-0.5">Idea → Business</span>
+              <span class="inline-flex items-center rounded-full border px-2 py-0.5">海外场景</span>
+            </div>
+            <div>
+              <h3 class="text-xl font-semibold text-gray-900">海外 AI 产品 · 7 天跑通 Demo → 支付 → 上线</h3>
+              <div class="mt-4 space-y-3 text-sm text-gray-700">
+                <div class="rounded-xl bg-slate-50 p-4">
+                  <span class="text-xs font-medium uppercase tracking-widest text-slate-500">交付内容</span>
+                  <p class="mt-2 leading-relaxed">刘小排亲授课程 + 一年圈子陪跑，手把手跑通从产品 Idea、AI 编程开发、订阅支付到增长迭代的全流程；配套直播串讲、案例复盘、AI 编程工具与模板、数据看板和增长建议，帮助你用 AI 做出盈利产品。</p>
+                </div>
+                <div class="rounded-xl bg-slate-50 p-4">
+                  <span class="text-xs font-medium uppercase tracking-widest text-slate-500">适合人群</span>
+                  <p class="mt-2 leading-relaxed">有创意但缺落地路径的个人开发者或小团队，想用 AI 做产品并愿意投入时间行动的实战型圈友。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="hidden w-full max-w-sm overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-50 via-slate-50 to-white md:block">
+            <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1200&q=80" alt="海外 AI 产品线下 Workshop" class="h-full w-full object-cover" />
+          </div>
+        </div>
+      </article>
+
+      <article class="soft-card border border-slate-200/70 p-6 shadow-sm md:p-8" id="yt-ai">
+        <div class="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+          <div class="max-w-xl space-y-3">
+            <div class="flex flex-wrap items-center gap-2 text-xs text-gray-500">
+              <span class="inline-flex items-center rounded-full border px-2 py-0.5">Coach 1v1</span>
+              <span class="inline-flex items-center rounded-full border px-2 py-0.5">内容出海</span>
+            </div>
+            <div>
+              <h3 class="text-xl font-semibold text-gray-900">YouTube AI 视频 · 高密度实战圈子</h3>
+              <div class="mt-4 space-y-3 text-sm text-gray-700">
+                <div class="rounded-xl bg-slate-50 p-4">
+                  <span class="text-xs font-medium uppercase tracking-widest text-slate-500">交付内容</span>
+                  <p class="mt-2 leading-relaxed">教练团 1v1 咨询、每月直播复盘与嘉宾分享，覆盖 AI 长短视频制作、版权与 YPP 申诉；提供专属风向标、提效工具库和变现资源池，高密度同步 YouTube AI 内容的前沿玩法。</p>
+                </div>
+                <div class="rounded-xl bg-slate-50 p-4">
+                  <span class="text-xs font-medium uppercase tracking-widest text-slate-500">适合人群</span>
+                  <p class="mt-2 leading-relaxed">已入门但增长受限的 YouTube 创作者，或希望把 YouTube 作为出海渠道、深耕 AI 视频赛道的团队与项目方。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="hidden w-full max-w-sm overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-50 via-slate-50 to-white md:block">
+            <img src="https://images.unsplash.com/photo-1525182008055-f88b95ff7980?auto=format&fit=crop&w=1200&q=80" alt="YouTube AI 视频活动签到" class="h-full w-full object-cover" />
+          </div>
+        </div>
+      </article>
+
+      <article class="soft-card border border-slate-200/70 p-6 shadow-sm md:p-8" id="bilibili-goods">
+        <div class="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+          <div class="max-w-xl space-y-3">
+            <div class="flex flex-wrap items-center gap-2 text-xs text-gray-500">
+              <span class="inline-flex items-center rounded-full border px-2 py-0.5">视频版知乎好物</span>
+              <span class="inline-flex items-center rounded-full border px-2 py-0.5">带货 &amp; 商单</span>
+            </div>
+            <div>
+              <h3 class="text-xl font-semibold text-gray-900">B 站好物 · 30 天集训 + 5 个月陪伴</h3>
+              <div class="mt-4 space-y-3 text-sm text-gray-700">
+                <div class="rounded-xl bg-slate-50 p-4">
+                  <span class="text-xs font-medium uppercase tracking-widest text-slate-500">交付内容</span>
+                  <p class="mt-2 leading-relaxed">“30 天密集训练 + 5 个月陪伴”模式：4 天直播集训 + 26 天实战练习 + 长期答疑，覆盖选品、脚本、拍摄、剪辑、数据运营、不露脸方案，并协助对接品牌商单资源。</p>
+                </div>
+                <div class="rounded-xl bg-slate-50 p-4">
+                  <span class="text-xs font-medium uppercase tracking-widest text-slate-500">适合人群</span>
+                  <p class="mt-2 leading-relaxed">能投入每日 2 小时以上进行内容创作，期待通过 B 站带货或商单实现持续变现的内容型创作者。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+                <div class="hidden w-full max-w-sm overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-50 via-slate-50 to-white md:block">
+            <img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=1200&q=80" alt="B 站好物圈友聚会" class="h-full w-full object-cover" />
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+
+      <section id="proof" class="border-b py-14">
+        <div class="mx-auto max-w-6xl px-4">
+          <div class="mb-8">
+            <h2 class="text-2xl font-semibold">圈友成绩</h2>
+          </div>
+          <div class="grid gap-4 md:grid-cols-3">
+            <div class="rounded-2xl border bg-white p-5">
+              <div class="h-36 w-full overflow-hidden rounded-xl bg-gray-100">
+                <img
+                  src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80"
+                  alt="钢铁的铁上线产品"
+                  class="h-full w-full object-cover"
+                />
+              </div>
+              <div class="mt-3 text-sm text-gray-500">钢铁的铁 · 58 岁零基础</div>
+              <h3 class="mt-1 text-2xl font-semibold text-gray-900">首日收入 $2000 美元</h3>
+              <p class="mt-2 text-sm text-gray-600">按照陪跑 SOP 搭建产品与支付链路，用模板完成部署，第一天即覆盖全部成本。</p>
+            </div>
+            <div class="rounded-2xl border bg-white p-5">
+              <div class="h-36 w-full overflow-hidden rounded-xl bg-gray-100">
+                <img
+                  src="https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=800&q=80"
+                  alt="兔老大 citely.ai 产品"
+                  class="h-full w-full object-cover"
+                />
+              </div>
+              <div class="mt-3 text-sm text-gray-500">兔老大 · citely.ai 创始人</div>
+              <h3 class="mt-1 text-2xl font-semibold text-gray-900">做出第一款产品</h3>
+              <p class="mt-2 text-sm text-gray-600">跟随课程完成调研、设计与 MVP 交付，产品上线后迅速获得创投圈关注与邀约。</p>
+            </div>
+            <div class="rounded-2xl border bg-white p-5">
+              <div class="h-36 w-full overflow-hidden rounded-xl bg-gray-100">
+                <img
+                  src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=800&q=80"
+                  alt="一君海外 AI 产品"
+                  class="h-full w-full object-cover"
+                />
+              </div>
+              <div class="mt-3 text-sm text-gray-500">一君 · 海外 AI 产品</div>
+              <h3 class="mt-1 text-2xl font-semibold text-gray-900">日收 $100–200 美元</h3>
+              <p class="mt-2 text-sm text-gray-600">坚持数据驱动迭代，收入稳定复利增长，正在拓展第二个付费产品线。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      
+
+      <section id="faq" class="border-b py-14">
+        <div class="mx-auto max-w-6xl px-4">
+          <div class="mb-8">
+            <h2 class="text-2xl font-semibold">常见问题</h2>
+          </div>
+          <div class="grid gap-4 md:grid-cols-2">
+            <details class="rounded-2xl border border-slate-200 bg-white p-5 transition hover:border-slate-300" open>
+              <summary class="flex cursor-pointer items-center justify-between gap-4 text-sm font-semibold text-slate-900">
+                <span>我符合加入深海圈的条件吗？</span>
+                <span class="faq-arrow text-xs text-slate-400">▼</span>
+              </summary>
+              <div class="mt-3 text-sm leading-6 text-gray-700">
+                更匹配的圈友通常具备三点：<b>对赛道有深耕意愿</b>、<b>已拿过阶段成果</b>、<b>愿长期投入时间行动</b>。报名后会进入双向审核，以确认价值观一致。
+              </div>
+            </details>
+            <details class="rounded-2xl border border-slate-200 bg-white p-5 transition hover:border-slate-300">
+              <summary class="flex cursor-pointer items-center justify-between gap-4 text-sm font-semibold text-slate-900">
+                <span>需要投入多少时间？</span>
+                <span class="faq-arrow text-xs text-slate-400">▼</span>
+              </summary>
+              <div class="mt-3 text-sm leading-6 text-gray-700">
+                三个方向前 1～2 个月安排高强度实操，建议每日保证至少 2 小时；之后进入长期陪跑与迭代阶段。只有愿意持续动手跑通闭环的圈友才合适。
+              </div>
+            </details>
+            <details class="rounded-2xl border border-slate-200 bg-white p-5 transition hover:border-slate-300">
+              <summary class="flex cursor-pointer items-center justify-between gap-4 text-sm font-semibold text-slate-900">
+                <span>零基础 / 英语不好也能学会吗？</span>
+                <span class="faq-arrow text-xs text-slate-400">▼</span>
+              </summary>
+              <div class="mt-3 text-sm leading-6 text-gray-700">
+                可以，但需要额外投入。课程会从零基础讲起，提供不露脸方案、AI 工具拆解等支持，同时指出哪些环节需要你多练、无法完全躺平。
+              </div>
+            </details>
+            <details class="rounded-2xl border border-slate-200 bg-white p-5 transition hover:border-slate-300">
+              <summary class="flex cursor-pointer items-center justify-between gap-4 text-sm font-semibold text-slate-900">
+                <span>如何进一步了解或报名？</span>
+                <span class="faq-arrow text-xs text-slate-400">▼</span>
+              </summary>
+              <div class="mt-3 text-sm leading-6 text-gray-700">
+                当前页面仅供了解，不展示价格、不收集表单。报名、费用、名额等信息以生财有术官方渠道为准，并在报名后进入双向审核流程。
+              </div>
+            </details>
+            <details class="rounded-2xl border border-slate-200 bg-white p-5 transition hover-border-slate-300">
+              <summary class="flex cursor-pointer items-center justify-between gap-4 text-sm font-semibold text-slate-900">
+                <span>遇到问题可以找谁？</span>
+                <span class="faq-arrow text-xs text-slate-400">▼</span>
+              </summary>
+              <div class="mt-3 text-sm leading-6 text-gray-700">
+                深海圈提供专属社群答疑、教练团 1v1 咨询（按方向不同）。也可以在生财主群 <code>@航海团队</code> 获取帮助。课程直播均有回放，可随时补课。
+              </div>
+            </details>
+            <details class="rounded-2xl border border-slate-200 bg-white p-5 transition hover-border-slate-300">
+              <summary class="flex cursor-pointer items-center justify-between gap-4 text-sm font-semibold text-slate-900">
+                <span>名额有限，审核没通过怎么办？</span>
+                <span class="faq-arrow text-xs text-slate-400">▼</span>
+              </summary>
+              <div class="mt-3 text-sm leading-6 text-gray-700">
+                为保障交付质量，各方向都有严格限额。若审核未通过，费用会原路退回。课程为虚拟产品，一旦正式报名不支持退款，请提前确认时间与投入安排。
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+
+
+
+
+      <section id="updates" class="border-b py-14">
+        <div class="mx-auto max-w-6xl px-4">
+          <div class="mb-8">
+            <h2 class="text-2xl font-semibold">最新进展</h2>
+            <p class="mt-2 text-gray-600">与生财有术官方同步。</p>
+          </div>
+          <div class="glass-card p-6 text-sm text-slate-700 md:p-8">
+            <div class="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-indigo-600">
+              <span class="inline-flex h-2 w-2 rounded-full bg-indigo-500"></span>
+              招生 & 课程动态周报
+            </div>
+            <p class="mt-3 leading-6">
+              以下是最近一周的重点更新，详细安排以生财有术主群与深海圈社群通知为准。
+            </p>
+            <div class="mt-5 space-y-3">
+              <div class="flex items-start gap-3 rounded-2xl border border-indigo-100 bg-indigo-50/60 p-4 text-slate-700">
+                <span class="mt-1 inline-flex h-2.5 w-2.5 rounded-full bg-indigo-500"></span>
+                <div>
+                  <div class="text-sm font-semibold text-slate-900">海外 AI 产品 · 第 02 期</div>
+                  <p class="mt-1 text-sm leading-6 text-slate-700">
+                    900 个席位 48 小时内报满，双向审核已完成 87%，开营直播定档 10 月 16 日晚 8 点。
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 rounded-2xl border border-emerald-100 bg-emerald-50/60 p-4 text-slate-700">
+                <span class="mt-1 inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+                <div>
+                  <div class="text-sm font-semibold text-slate-900">YouTube AI 视频 · 迭代营上线</div>
+                  <p class="mt-1 text-sm leading-6 text-slate-700">
+                    新增「AI Shorts 加速计划」，10 月排期包含 4 场教练直播复盘与 12 套自动化工作流模板。
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 rounded-2xl border border-amber-100 bg-amber-50/60 p-4 text-slate-700">
+                <span class="mt-1 inline-flex h-2.5 w-2.5 rounded-full bg-amber-500"></span>
+                <div>
+                  <div class="text-sm font-semibold text-slate-900">B 站好物 · 打卡墙开放</div>
+                  <p class="mt-1 text-sm leading-6 text-slate-700">
+                    前 180 位圈友已完成首周选品与脚本提交，线下实战营将于 10 月底在杭州举行，小班席位所剩不多。
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-slate-700">
+                <span class="mt-1 inline-flex h-2.5 w-2.5 rounded-full bg-slate-400"></span>
+                <div>
+                  <div class="text-sm font-semibold text-slate-900">下一步</div>
+                  <p class="mt-1 text-sm leading-6 text-slate-700">
+                    正在筹备 11 月深圳 Meetup，并将对接真实用户 API，采访优秀圈友案例，预计于 11 月中旬发布。
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div
+      id="learning-modal"
+      class="modal-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="learning-modal-title"
+      aria-hidden="true"
+      hidden
+    >
+      <div class="modal-card" data-modal-card tabindex="-1">
+        <button type="button" class="modal-secondary modal-close" data-modal-close aria-label="关闭提示">
+          关闭
+        </button>
+        <span class="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
+          <span class="inline-flex h-1.5 w-1.5 rounded-full bg-indigo-500"></span>
+          学习中心
+        </span>
+        <h3 id="learning-modal-title">学习中心即将上线</h3>
+        <p>
+          课程目录、直播回放等正在配置中。完成后我们会在生财主群第一时间同步开放通知。你可以先浏览下方方向介绍，或关注“最新进展”了解筹备情况。
+        </p>
+        <div class="modal-actions">
+          <a href="#tracks" class="modal-primary" data-modal-dismiss>
+            查看方向与准备事项
+          </a>
+          <button type="button" class="modal-secondary" data-modal-close>
+            我知道了
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="py-10">
+      <div class="mx-auto flex max-w-6xl flex-col items-start gap-4 px-4 text-sm text-gray-600 md:flex-row md:items-center md:justify-between">
+        <div class="space-y-1">
+          <div>品牌绑定：生财有术 · 深海圈</div>
+          <div>价值观与公约：沿用生财有术社群规范</div>
+          <div>沟通渠道：生财有术主群 @航海团队</div>
+        </div>
+        <div class="flex flex-wrap items-center gap-3">
+          <a href="#tracks" class="rounded-lg border px-3 py-1.5">回到方向选择</a>
+          <a href="#home" class="rounded-lg border px-3 py-1.5">返回顶部</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const BANNERS = [
+        {
+          tag: "线下 Workshop",
+          title: "教练现场拆分项目，手把手跑通流程",
+          desc: "小班实训氛围，一起把 Idea 拆成可执行任务，当场动手完成关键步骤。",
+          ctaText: "了解陪跑方式",
+          ctaHref: "#tracks",
+          meta: "海外 AI 产品 · 集训实拍",
+          image: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1600&q=80",
+        },
+        {
+          tag: "活动签到",
+          title: "Idea to Business · 第二期开营日",
+          desc: "圈友携成果回到线下复盘，签完到立刻开启全天拆解与实战演练。",
+          ctaText: "查看更多成果",
+          ctaHref: "#proof",
+          meta: "海外 AI 产品 · 开营现场",
+          image: "https://images.unsplash.com/photo-1529070538774-1843cb3265df?auto=format&fit=crop&w=1600&q=80",
+        },
+        {
+          tag: "圈友聚会",
+          title: "同城复盘 · 彼此成为长期伙伴",
+          desc: "深海圈每月组织同城 meet-up，分享数据、复盘踩坑、寻找合作伙伴。",
+          ctaText: "关注最新进展",
+          ctaHref: "#updates",
+          meta: "北京站 · 2025 同城聚会",
+          image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=1600&q=80",
+        },
+      ];
+
+      const bannerBackground = document.getElementById("banner-background");
+      const bannerTag = document.getElementById("banner-tag");
+      const bannerTitle = document.getElementById("banner-title");
+      const bannerDesc = document.getElementById("banner-desc");
+      const bannerMeta = document.getElementById("banner-meta");
+      const bannerCta = document.getElementById("banner-cta");
+      const bannerDots = document.getElementById("banner-dots");
+      const bannerProgress = document.getElementById("banner-progress");
+      const bannerPrev = document.getElementById("banner-prev");
+      const bannerNext = document.getElementById("banner-next");
+
+      let bannerIndex = 0;
+      let bannerTimer;
+
+      function renderBanner() {
+        if (!BANNERS.length) {
+          document.getElementById("hero-carousel").classList.add("hidden");
+          return;
+        }
+
+        if (!bannerDots.hasChildNodes()) {
+          BANNERS.forEach((_, idx) => {
+            const dot = document.createElement("button");
+            dot.type = "button";
+            dot.className = "banner-dot";
+            dot.setAttribute("aria-label", `跳转到第 ${idx + 1} 条 banner`);
+            dot.addEventListener("click", () => {
+              bannerIndex = idx;
+              renderBanner();
+              restartBannerTimer();
+            });
+            bannerDots.appendChild(dot);
+          });
+        }
+
+        const slide = BANNERS[bannerIndex];
+        const baseGradient = "linear-gradient(135deg, rgba(12, 18, 44, 0.55), rgba(17, 24, 39, 0.2))";
+        const imageLayer = slide.image ? `, url('${slide.image}')` : "";
+        bannerBackground.style.backgroundImage = `${baseGradient}${imageLayer}`;
+        bannerTitle.textContent = slide.title || "";
+        bannerDesc.textContent = slide.desc || "";
+        bannerMeta.textContent = slide.meta || "";
+        bannerTag.textContent = slide.tag || "";
+        bannerCta.textContent = slide.ctaText || "了解更多";
+        bannerCta.href = slide.ctaHref || "#";
+
+        const dots = bannerDots.querySelectorAll(".banner-dot");
+        dots.forEach((dot, idx) => {
+          dot.classList.toggle("active", idx === bannerIndex);
+        });
+        bannerProgress.textContent = `${bannerIndex + 1} / ${BANNERS.length}`;
+
+        const controlsHidden = BANNERS.length <= 1;
+        bannerPrev.classList.toggle("hidden", controlsHidden);
+        bannerNext.classList.toggle("hidden", controlsHidden);
+        bannerDots.parentElement.classList.toggle("hidden", controlsHidden);
+      }
+
+      function switchBanner(step) {
+        bannerIndex = (bannerIndex + step + BANNERS.length) % BANNERS.length;
+        renderBanner();
+      }
+
+      function restartBannerTimer() {
+        if (bannerTimer) clearInterval(bannerTimer);
+        if (BANNERS.length <= 1) return;
+        bannerTimer = setInterval(() => {
+          switchBanner(1);
+        }, 6000);
+      }
+
+      bannerPrev.addEventListener("click", () => {
+        switchBanner(-1);
+        restartBannerTimer();
+      });
+
+      bannerNext.addEventListener("click", () => {
+        switchBanner(1);
+        restartBannerTimer();
+      });
+
+      renderBanner();
+      restartBannerTimer();
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const modal = document.getElementById("learning-modal");
+        if (!modal) return;
+        const card = modal.querySelector("[data-modal-card]");
+        const openers = document.querySelectorAll("[data-learning-modal]");
+        const closeButtons = modal.querySelectorAll("[data-modal-close]");
+        const dismissLinks = modal.querySelectorAll("[data-modal-dismiss]");
+        let lastActiveElement = null;
+
+        function lockScroll(lock) {
+          document.body.style.overflow = lock ? "hidden" : "";
+        }
+
+        function openModal(event) {
+          if (event) {
+            event.preventDefault();
+          }
+          lastActiveElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+          modal.classList.add("active");
+          modal.removeAttribute("hidden");
+          modal.setAttribute("aria-hidden", "false");
+          lockScroll(true);
+          if (card instanceof HTMLElement) {
+            card.focus();
+          }
+        }
+
+        function closeModal({ focusBack = true } = {}) {
+          modal.classList.remove("active");
+          modal.setAttribute("hidden", "");
+          modal.setAttribute("aria-hidden", "true");
+          lockScroll(false);
+          if (focusBack && lastActiveElement) {
+            lastActiveElement.focus();
+          }
+        }
+
+        openers.forEach((opener) => {
+          opener.addEventListener("click", openModal);
+        });
+
+        closeButtons.forEach((button) => {
+          button.addEventListener("click", (event) => {
+            event.preventDefault();
+            closeModal();
+          });
+        });
+
+        dismissLinks.forEach((link) => {
+          link.addEventListener("click", () => {
+            closeModal({ focusBack: false });
+          });
+        });
+
+        modal.addEventListener("click", (event) => {
+          if (event.target === modal) {
+            closeModal();
+          }
+        });
+
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape" && modal.classList.contains("active")) {
+            closeModal();
+          }
+        });
+      });
+    </script>
+
+  </body>
+</html>
